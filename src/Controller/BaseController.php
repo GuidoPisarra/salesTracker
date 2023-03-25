@@ -42,7 +42,7 @@ class BaseController extends AbstractController
 
     public function errores_to_log(array $errores, AppLogs $log, string $endpoint)
     {
-        for ($i=0; $i < count($errores); $i++) { 
+        for ($i = 0; $i < count($errores); $i++) {
             $log::get_log()->error('ENDPOINT: ' . $endpoint . ' ERROR: ' . $errores[$i]);
         }
     }
