@@ -14,7 +14,12 @@
 
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
-
+*.pem
+/public
 ###> app ###
 /pdf
 ###< app ###
+*.env
+composer.json
+composer.lock
+symfony.lock
