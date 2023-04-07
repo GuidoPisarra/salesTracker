@@ -24,7 +24,7 @@ services:
     # please note that last definitions always *replace* previous ones
 
     # Seguridad
-    App\Security\AseguradosProvider:
+    App\Security\UsuariosProvider:
         arguments:
             - '@App\Repository\UsuarioRepository'
 
@@ -43,9 +43,9 @@ services:
             - '%kernel.project_dir%'
             
     # DTOs
-    App\DTO\Usuario\RegistrarEmailDTO:
+    App\DTO\Usuario\RegistrarUsuarioDTO:
         arguments:
             - '@App\Repository\UsuarioRepository'
             - '@Symfony\Component\Cache\Adapter\FilesystemAdapter'
-            - '@App\Service\Pregunta'
+
             

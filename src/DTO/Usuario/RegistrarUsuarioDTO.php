@@ -4,12 +4,33 @@ namespace App\DTO\Usuario;
 
 use App\Repository\UsuarioRepository;
 
-class UsuarioDTO
+class RegistrarUsuarioDTO
 {
-    protected $nombre;
+    protected $id;
     protected $email;
+    protected $nombre;
     protected $password;
+    protected $role;
+    protected $token;
 
+    public function to_array(): array
+    {
+        $respuesta = [];
+
+        $respuesta['nombre'] = $this->getNombre();
+        $respuesta['email'] = $this->getEmail();
+        $respuesta['password'] = $this->getPassword();
+
+
+
+
+        return $respuesta;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
     public function setNombre($nombre): void
     {
         $this->nombre = $nombre;
@@ -25,6 +46,11 @@ class UsuarioDTO
         $this->password = $password;
     }
 
+    public function setRole($role): void
+    {
+        $this->role = $role;
+    }
+
     public function getNombre(): string
     {
         return $this->nombre;
@@ -38,5 +64,10 @@ class UsuarioDTO
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
     }
 }

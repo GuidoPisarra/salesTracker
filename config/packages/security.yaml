@@ -6,8 +6,8 @@ security:
             id: 'App\Security\CustomPasswordHasher'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        asegurados:
-            id: App\Security\AseguradosProvider
+        usuarios:
+            id: App\Security\UsuariosProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,7 +21,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         api:
             pattern:   ^/api
-            provider: asegurados
+            provider: usuarios
             stateless: true
             guard:
                 authenticators:
@@ -30,5 +30,5 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/usuario/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/usuario/registrar_email, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/usuario/registrar_usuario, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

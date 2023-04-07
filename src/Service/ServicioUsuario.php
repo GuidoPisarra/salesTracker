@@ -2,13 +2,7 @@
 
 namespace App\Service;
 
-use App\DTO\Usuario\ControlVersionDTO;
-use App\DTO\Usuario\CambiarPasswordDTO;
-use App\DTO\Usuario\GuardarTokenNotificacionesPushDTO;
-use App\DTO\Usuario\PasswordProvisoriaDTO;
-use App\DTO\Usuario\RegistrarEmailDTO;
-use App\DTO\Usuario\ValidarEmailDTO;
-use App\DTO\Usuario\RecuperarPasswordDTO;
+use App\DTO\Usuario\RegistrarUsuarioDTO;
 use App\Model\Usuario;
 use App\Repository\UsuarioRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -28,13 +22,40 @@ class ServicioUsuario
         $this->jwt_manager = $jwt_manager;
     }
 
-  /*   public function encriptar_contraseña(UserInterface $usuario): string
+    public function encriptar_contraseña(UserInterface $usuario): string
     {
         $password = $this->get_hasher_interface()->hashPassword($usuario, $usuario->getPassword());
         return $password;
-    } */
+    }
 
+    protected function get_hasher_interface(): UserPasswordHasherInterface
+    {
+        return $this->hasher_interface;
+    }
 
+    protected function get_rep_usuario(): UsuarioRepository
+    {
+        return $this->rep_usuario;
+    }
 
+    protected function get_jwt_manager(): JWTTokenManagerInterface
+    {
+        return $this->jwt_manager;
+    }
 
+    public function registrar_usuario(RegistrarUsuarioDTO $usuario)
+    {
+
+        $findUser = $this->rep_usuario->buscar_usuario($usuario);
+        if ($findUser !== null) {
+            var_dump("Ya existe ", $usuario->getEmail());
+        } else {
+            $user = new Usuario();
+            $user->set_password($usuario->getPassword());
+            $user->set_password($this->encriptar_contraseña($user));
+            $usuario->setPassword($user->get_password());
+            $usuario->setRole($user->get_roles());
+            $this->rep_usuario->registrar_usuario($usuario);
+        }
+    }
 }

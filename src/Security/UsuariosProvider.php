@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class AseguradosProvider implements UserProviderInterface, PasswordUpgraderInterface
+class UsuariosProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
     protected $rep_usuario;
 
@@ -33,11 +33,12 @@ class AseguradosProvider implements UserProviderInterface, PasswordUpgraderInter
         // The $identifier argument is whatever value is being returned by the
         // getUserIdentifier() method in your User class.
 
-        //  $usuario = $this->get_rep_usuario()->buscar_usuario_email($identifier);
-        $usuario = null;
+        $usuario = $this->get_rep_usuario()->buscar_usuario_email($identifier);
+
         if ($usuario === null) {
             throw new UserNotFoundException('El usuario no se encuentra registrado');
         }
+
 
         return $usuario;
     }
@@ -85,8 +86,12 @@ class AseguradosProvider implements UserProviderInterface, PasswordUpgraderInter
 
     public function loadUserByUsername(string $username): UserInterface
     {
-        // $usuario = $this->get_rep_usuario()->buscar_usuario_email($username);
+
         $usuario = null;
+        var_dump("SEEEE");
+        // var_dump($usuario);
+        $usuario = $this->get_rep_usuario()->buscar_usuario_email($username);
+
         if ($usuario === null) {
             throw new UserNotFoundException('El usuario no se encuentra registrado');
         }

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\DTO\Usuario\RegistrarUsuarioDTO;
+use App\Form\Type\Usuario\RegistrarUsuarioType;
 use App\Model\Usuario;
 use App\Repository\UsuarioRepository;
 use App\Service\AppLogs;
@@ -34,37 +36,35 @@ class UsuarioController extends BaseController
     }
 
     /**
-     * @Route("/registrar_email", name="app_registrar_email", methods={"POST"})
+     * @Route("/registrar_usuario", name="app_registrar_usuario", methods={"POST"})
      */
-    public function registrar_email(UsuarioRepository $rep_usuario,  Request $request, ValidatorInterface $validator, ServicioUsuario $servicio_usuario): JsonResponse
+    public function registrar_usuario(UsuarioRepository $rep_usuario,  Request $request, ValidatorInterface $validator, ServicioUsuario $servicio_usuario): JsonResponse
     {
-        var_dump('llega');
-        /*    $this->request_to_json($request);
-        $dto = new RegistrarEmailDTO($rep_usuario);
-        $form = $this->createForm(RegistrarEmailType::class, $dto);
+        $this->request_to_json($request);
+        $dto = new RegistrarUsuarioDTO($rep_usuario);
+        $form = $this->createForm(RegistrarUsuarioType::class, $dto);
         $form->handleRequest($request);
 
         $errores = $this->obtener_validaciones($validator, $dto);
         if (count($errores) > 0) {
-            $this->errores_to_log($errores, $log, 'registrar_email');
+            //$this->errores_to_log($errores, $log, 'registrar_email');
             return $this->respuesta(400, [], $errores, 400);
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $servicio_usuario->grabar_email($dto);
-                $emails->verificacion_email($dto);
+                $servicio_usuario->registrar_usuario($dto);
                 $respuesta = [
                     'OK' => 'OK'
                 ];
-                return $this->respuesta(200, $respuesta, []);
+                return $this->respuesta(200, [$dto], []);
             } catch (\Throwable $th) {
-                $log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());
+                //$log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());
                 return $this->respuesta(400, [], ['Ocurrió un error enviado la verificación de email.'], 400);
             }
         }
 
-        $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.'); */
+        // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
         return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
     }
 }
