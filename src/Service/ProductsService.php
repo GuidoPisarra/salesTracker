@@ -36,4 +36,9 @@ class ProductsService
         $dto->setCode(str_replace(';', '-', $dto->getCode()));
         return $this->rep_products->one_product($dto);
     }
+
+    public function products_price_percentage(float $percentage)
+    {
+        return $this->rep_products->products_price_percentage($percentage);
+    }
 }

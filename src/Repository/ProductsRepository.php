@@ -67,16 +67,28 @@ class ProductsRepository extends BaseRepository
 
     public function one_product(OneProductDTO $dto): array
     {
-        var_dump($dto);
         $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price cost_price,sale_price sale_price,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code AND activo=0');
 
         $newProduct = $dto->to_array();
         $query->bindParam(':code', $newProduct["code"]);
 
-        $response = $query->execute();
+        $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $product = $query->fetch();
 
         return $product;
+    }
+
+    public function products_price_percentage(float $percentage): bool
+    {
+        $percent = (float) $percentage;
+
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)) WHERE p.activo = 0');
+
+        $query->bindParam(':percent', $percentage);
+        $response = $query->execute();
+
+
+        return $response;
     }
 }

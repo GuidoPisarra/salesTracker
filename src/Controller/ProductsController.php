@@ -116,18 +116,14 @@ class ProductsController extends BaseController
      */
     public function one_product(ValidatorInterface $validator, ProductsService $products_service, $code): JsonResponse
     {
-
         $dto = new OneProductDTO();
         $form = $this->createForm(OneProductType::class, $dto);
         $dto->setCode($code);
-
-
         $errores = $this->obtener_validaciones($validator, $dto);
         if (count($errores) > 0) {
             //$this->errores_to_log($errores, $log, 'app_agregar_productos');
             return $this->respuesta(400, [], $errores, 400);
         }
-
 
         try {
             $resultado = $products_service->one_product($dto);
@@ -138,6 +134,35 @@ class ProductsController extends BaseController
             $respuesta = [
                 'OK' => 'OK',
                 'product' => $resultado
+            ];
+            return $this->respuesta(200, $respuesta, []);
+        } catch (\Throwable $th) {
+            //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: ' . $th->getMessage());
+            return $this->respuesta(400, [], [$th->getMessage()], 400);
+        }
+
+        // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
+        return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
+    }
+
+    /**
+     * @Route("/products/price_percent/{percentage}", name="app_products_price_percent", methods={"GET"})
+     */
+    public function percentage_price_product(ValidatorInterface $validator, ProductsService $products_service, $percentage): JsonResponse
+    {
+        if ($percentage === null) {
+            //$this->errores_to_log($errores, $log, 'app_agregar_productos');
+            return $this->respuesta(400, [], [], 400);
+        }
+
+        try {
+            $resultado = $products_service->products_price_percentage($percentage);
+            if ($resultado !== true) {
+                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                throw new \Exception("Ocurrió un error al buscar el producto.");
+            }
+            $respuesta = [
+                'OK' => 'OK',
             ];
             return $this->respuesta(200, $respuesta, []);
         } catch (\Throwable $th) {
