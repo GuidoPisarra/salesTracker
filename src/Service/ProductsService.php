@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\Products\AddProductDTO;
+use App\DTO\Products\AddStockDTO;
 use App\DTO\Products\DeleteProductDTO;
 use App\DTO\Products\OneProductDTO;
 use App\Repository\ProductsRepository;
@@ -40,5 +41,10 @@ class ProductsService
     public function products_price_percentage(float $percentage)
     {
         return $this->rep_products->products_price_percentage($percentage);
+    }
+
+    public function add_stock_product(AddStockDTO $dto)
+    {
+        return $this->rep_products->add_products_stcok($dto);
     }
 }

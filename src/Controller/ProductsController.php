@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\DTO\Products\AddProductDTO;
+use App\DTO\Products\AddStockDTO;
 use App\DTO\Products\DeleteProductDTO;
 use App\DTO\Products\DelProductDTO;
 use App\DTO\Products\OneProductDTO;
 use App\Form\Type\Productos\AddProductType;
+use App\Form\Type\Productos\AddStockType;
 use App\Form\Type\Productos\DeleteProductType;
 use App\Form\Type\Productos\DelProductType;
 use App\Form\Type\Productos\OneProductType;
@@ -170,6 +172,42 @@ class ProductsController extends BaseController
             return $this->respuesta(400, [], [$th->getMessage()], 400);
         }
 
+        // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
+        return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
+    }
+
+    /**
+     * @Route("/products/stock", name="app_products_stock", methods={"POST"})
+     */
+    public function product_stock(Request $request, ValidatorInterface $validator, ProductsService $products_service): JsonResponse
+    {
+        $this->request_to_json($request);
+        $dto = new AddStockDTO;
+        $form = $this->createForm(AddStockType::class, $dto);
+        $form->handleRequest($request);
+
+        $errores = $this->obtener_validaciones($validator, $dto);
+        if (count($errores) > 0) {
+            //$this->errores_to_log($errores, $log, 'app_agregar_productos');
+            return $this->respuesta(400, [], $errores, 400);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $resultado = $products_service->add_stock_product($dto);
+                if ($resultado !== true) {
+                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                    throw new \Exception("Ocurrió un error al agregar el producto.");
+                }
+                $respuesta = [
+                    'OK' => 'OK'
+                ];
+                return $this->respuesta(200, $respuesta, []);
+            } catch (\Throwable $th) {
+                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: ' . $th->getMessage());
+                return $this->respuesta(400, [], [$th->getMessage()], 400);
+            }
+        }
         // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
         return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
     }

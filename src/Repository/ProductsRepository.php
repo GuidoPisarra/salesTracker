@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\DTO\Products\AddProductDTO;
+use App\DTO\Products\AddStockDTO;
 use App\DTO\Products\DeleteProductDTO;
 use App\DTO\Products\OneProductDTO;
 use App\DTO\Products\ProductDTO;
@@ -89,6 +90,19 @@ class ProductsRepository extends BaseRepository
         $response = $query->execute();
 
 
+        return $response;
+    }
+
+    public function add_products_stcok(AddStockDTO $dto): bool
+    {
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity WHERE p.id = :id AND p.activo = 0');
+
+        $newProduct = $dto->to_array();
+        $activo = 0;
+        $query->bindParam(':id', $newProduct["id"]);
+        $query->bindParam(':quantity', $newProduct["quantity"]);
+
+        $response = $query->execute();
         return $response;
     }
 }
