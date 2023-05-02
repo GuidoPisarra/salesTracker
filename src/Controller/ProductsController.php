@@ -62,7 +62,7 @@ class ProductsController extends BaseController
             try {
                 $resultado = $products_service->add_product($dto);
                 if ($resultado !== true) {
-                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                     throw new \Exception("Ocurrió un error al agregar el producto.");
                 }
                 $respuesta = [
@@ -97,7 +97,7 @@ class ProductsController extends BaseController
             try {
                 $resultado = $products_service->del_product($dto);
                 if ($resultado !== true) {
-                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                     throw new \Exception("Ocurrió un error al agregar el producto.");
                 }
                 $respuesta = [
@@ -130,7 +130,7 @@ class ProductsController extends BaseController
         try {
             $resultado = $products_service->one_product($dto);
             if ($resultado === null) {
-                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                 throw new \Exception("Ocurrió un error al buscar el producto.");
             }
             $respuesta = [
@@ -160,7 +160,7 @@ class ProductsController extends BaseController
         try {
             $resultado = $products_service->products_price_percentage($percentage);
             if ($resultado !== true) {
-                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                 throw new \Exception("Ocurrió un error al buscar el producto.");
             }
             $respuesta = [
@@ -196,7 +196,7 @@ class ProductsController extends BaseController
             try {
                 $resultado = $products_service->add_stock_product($dto);
                 if ($resultado !== true) {
-                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                     throw new \Exception("Ocurrió un error al agregar el producto.");
                 }
                 $respuesta = [

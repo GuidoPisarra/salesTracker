@@ -51,7 +51,7 @@ class ExpensesController extends BaseController
             try {
                 $resultado = $expense_service->add_expense($dto);
                 if ($resultado !== true) {
-                    //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el asegurado.');
+                    //$log::get_log()->error('ENDPOINT: app_agregar_gastos ERROR: Ocurrió un error grabando el gasto.');
                     throw new \Exception("Ocurrió un error al agregar el producto.");
                 }
                 $respuesta = [
