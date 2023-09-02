@@ -88,8 +88,7 @@ class UsuariosProvider implements UserProviderInterface, PasswordUpgraderInterfa
     {
 
         $usuario = null;
-        var_dump("SEEEE");
-        // var_dump($usuario);
+
         $usuario = $this->get_rep_usuario()->buscar_usuario_email($username);
 
         if ($usuario === null) {

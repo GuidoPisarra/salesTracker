@@ -30,7 +30,8 @@ class UsuarioController extends BaseController
     {
         $token = $jwt_manager->create($usuario);
         $respuesta = [
-            'token' => $token
+            'token' => $token,
+            'role' => $usuario->getRoles()
         ];
         return $this->respuesta(200, $respuesta, []);
     }
