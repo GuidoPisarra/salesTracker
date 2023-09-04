@@ -54,6 +54,20 @@ class UsuarioRepository extends BaseRepository
         $query->bindParam(':password', $user['password']);
         $query->bindParam(':role', $role);
         $res = $query->execute();
-        var_dump($res);
+    }
+
+    public function buscar_rol_id_usuario(string $user): array
+    {
+
+
+        $query = $this->get_bbdd()->prepare('SELECT id, role, id_negocio FROM user WHERE email = :email');
+        $query->bindParam(':email', $user);
+        $query->execute();
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($resultados) > 0) {
+            return $resultados[0];
+        }
+        return $resultados;
     }
 }

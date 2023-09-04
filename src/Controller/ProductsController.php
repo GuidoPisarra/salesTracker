@@ -5,15 +5,11 @@ namespace App\Controller;
 use App\DTO\Products\AddProductDTO;
 use App\DTO\Products\AddStockDTO;
 use App\DTO\Products\DeleteProductDTO;
-use App\DTO\Products\DelProductDTO;
 use App\DTO\Products\OneProductDTO;
 use App\Form\Type\Productos\AddProductType;
 use App\Form\Type\Productos\AddStockType;
 use App\Form\Type\Productos\DeleteProductType;
-use App\Form\Type\Productos\DelProductType;
 use App\Form\Type\Productos\OneProductType;
-use App\Repository\ProductsRepository;
-use App\Service\AppLogs;
 use App\Service\ProductsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,12 +23,13 @@ class ProductsController extends BaseController
 {
 
     /**
-     * @Route("/products", name="app_products_list", methods={"GET"})
+     * @Route("/products_list/{id_local}", name="app_products_list", methods={"GET"})
      */
-    public function list_products(Request $request, ValidatorInterface $validator, ProductsService $products_service): JsonResponse
+    public function list_products(Request $request, ValidatorInterface $validator, ProductsService $products_service, int $id_local): JsonResponse
     {
         try {
-            $list_products = $products_service->list_products();
+            $a = $id_local;
+            $list_products = $products_service->list_products($id_local);
             return $this->respuesta(200, $list_products, []);
         } catch (\Throwable $th) {
             //$log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());
@@ -114,13 +111,14 @@ class ProductsController extends BaseController
     }
 
     /**
-     * @Route("/products/{code}", name="app_products_get_one", methods={"GET"})
+     * @Route("/products_one/{code}/{id_negocio}", name="app_products_get_one", methods={"GET"})
      */
-    public function one_product(ValidatorInterface $validator, ProductsService $products_service, $code): JsonResponse
+    public function one_product(ValidatorInterface $validator, ProductsService $products_service, string $code, int $id_negocio): JsonResponse
     {
         $dto = new OneProductDTO();
         $form = $this->createForm(OneProductType::class, $dto);
         $dto->setCode($code);
+        $dto->setIdNegocio($id_negocio);
         $errores = $this->obtener_validaciones($validator, $dto);
         if (count($errores) > 0) {
             //$this->errores_to_log($errores, $log, 'app_agregar_productos');
@@ -148,17 +146,17 @@ class ProductsController extends BaseController
     }
 
     /**
-     * @Route("/products/price_percent/{percentage}", name="app_products_price_percent", methods={"GET"})
+     * @Route("/products/price_percent/{percentage}/{id_negocio}", name="app_products_price_percent", methods={"GET"})
      */
-    public function percentage_price_product(ValidatorInterface $validator, ProductsService $products_service, $percentage): JsonResponse
+    public function percentage_price_product(ValidatorInterface $validator, ProductsService $products_service, $percentage, $id_negocio): JsonResponse
     {
-        if ($percentage === null) {
+        if ($percentage === null || $id_negocio === null) {
             //$this->errores_to_log($errores, $log, 'app_agregar_productos');
             return $this->respuesta(400, [], [], 400);
         }
 
         try {
-            $resultado = $products_service->products_price_percentage($percentage);
+            $resultado = $products_service->products_price_percentage($percentage, $id_negocio);
             if ($resultado !== true) {
                 //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                 throw new \Exception("Ocurrió un error al buscar el producto.");

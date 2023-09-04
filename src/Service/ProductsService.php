@@ -17,9 +17,9 @@ class ProductsService
         $this->rep_products = $rep_products;
     }
 
-    public function list_products()
+    public function list_products(int $id_local)
     {
-        return $this->rep_products->list_products();
+        return $this->rep_products->list_products($id_local);
     }
 
     public function add_product(AddProductDTO $dto)
@@ -38,9 +38,9 @@ class ProductsService
         return $this->rep_products->one_product($dto);
     }
 
-    public function products_price_percentage(float $percentage)
+    public function products_price_percentage(float $percentage, int $id_negocio)
     {
-        return $this->rep_products->products_price_percentage($percentage);
+        return $this->rep_products->products_price_percentage($percentage, $id_negocio);
     }
 
     public function add_stock_product(AddStockDTO $dto)

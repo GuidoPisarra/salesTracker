@@ -12,6 +12,7 @@ class AddProductDTO
     protected $idProveedor;
     protected $code;
     protected $size;
+    protected $idNegocio;
 
     public function to_array(): array
     {
@@ -23,6 +24,7 @@ class AddProductDTO
         $resultado['idProveedor'] = 1;
         $resultado['code'] = $this->getCode();
         $resultado['size'] = $this->getSize();
+        $resultado['id_negocio'] = $this->getIdNegocio();
 
         return $resultado;
     }
@@ -95,5 +97,15 @@ class AddProductDTO
     public function getSize(): string
     {
         return $this->size;
+    }
+
+    public function setIdNegocio(string $id_negocio): void
+    {
+        $this->idNegocio = $id_negocio;
+    }
+
+    public function getIdNegocio(): string
+    {
+        return $this->idNegocio;
     }
 }

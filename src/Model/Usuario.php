@@ -47,7 +47,7 @@ class Usuario implements UserInterface
         return $this->email;
     }
 
-    public function get_id(): int
+    public function getId(): int
     {
         return (int) $this->id;
     }

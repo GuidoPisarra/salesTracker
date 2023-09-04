@@ -15,12 +15,14 @@ use App\Model\Product;
 class ProductsRepository extends BaseRepository
 {
 
-    public function list_products(): ?array
+    public function list_products(int $id_local): ?array
     {
-        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price cost_price,sale_price sale_price,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  activo = :activo');
+        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price cost_price,sale_price sale_price,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  activo = :activo AND id_negocio = :local');
 
         $activo = 0;
         $query->bindParam(':activo', $activo);
+        $query->bindParam(':local', $id_local);
+
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $products = $query->fetchAll();
@@ -36,8 +38,8 @@ class ProductsRepository extends BaseRepository
     {
 
         $query = $this->get_bbdd()->prepare('INSERT INTO product 
-        (description, cost_price, sale_price, quantity, id_proveedor, code, size, activo)
-        VALUES (:description, :costPrice, :salePrice, :quantity, :idProveedor, :code, :size, :activo)');
+        (description, cost_price, sale_price, quantity, id_proveedor, code, size, activo, id_negocio)
+        VALUES (:description, :costPrice, :salePrice, :quantity, :idProveedor, :code, :size, :activo, :id_negocio)');
 
         $newProduct = $dto->to_array();
         $activo = 0;
@@ -49,6 +51,7 @@ class ProductsRepository extends BaseRepository
         $query->bindParam(':code', $newProduct["code"]);
         $query->bindParam(':size', $newProduct["size"]);
         $query->bindParam(':activo', $activo);
+        $query->bindParam(':id_negocio', $newProduct["id_negocio"]);
 
         $response = $query->execute();
         return $response;
@@ -68,10 +71,11 @@ class ProductsRepository extends BaseRepository
 
     public function one_product(OneProductDTO $dto): array
     {
-        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price cost_price,sale_price sale_price,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code AND activo=0');
+        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price cost_price,sale_price sale_price,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code AND activo=0 AND id_negocio = :id_negocio');
 
         $newProduct = $dto->to_array();
         $query->bindParam(':code', $newProduct["code"]);
+        $query->bindParam(':id_negocio', $newProduct["id_negocio"]);
 
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -80,13 +84,14 @@ class ProductsRepository extends BaseRepository
         return $product;
     }
 
-    public function products_price_percentage(float $percentage): bool
+    public function products_price_percentage(float $percentage, int $id_negocio): bool
     {
         $percent = (float) $percentage;
+        $negocio = $id_negocio;
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)) WHERE p.activo = 0 AND id_negocio = :id_negocio');
 
-        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)) WHERE p.activo = 0');
-
-        $query->bindParam(':percent', $percentage);
+        $query->bindParam(':percent', $percent);
+        $query->bindParam(':id_negocio', $negocio);
         $response = $query->execute();
 
 

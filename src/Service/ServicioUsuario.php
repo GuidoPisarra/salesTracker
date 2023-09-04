@@ -58,4 +58,14 @@ class ServicioUsuario
             $this->rep_usuario->registrar_usuario($usuario);
         }
     }
+
+    public function get_rol_id_usuario(string $email)
+    {
+
+        $findUser = $this->rep_usuario->buscar_rol_id_usuario($email);
+        if ($findUser !== null) {
+            return $findUser;
+        }
+        return null;
+    }
 }
