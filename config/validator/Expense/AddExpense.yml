@@ -6,6 +6,6 @@ App\DTO\Expenses\AddExpenseDTO:
         price:
             - NotBlank: 
                 message: 'El campo precio no puede quedar vacío.'
-        id_sucursal:
+        id_negocio:
             - NotBlank: 
-                message: 'El campo id sucursal no puede quedar vacío.'    
+                message: 'El campo id negocio no puede quedar vacío.'    

@@ -10,6 +10,7 @@ class AddExpenseDTO
 
     protected $description;
     protected $price;
+    protected $id_negocio;
     protected $id_sucursal;
     protected $dateExpense;
 
@@ -18,6 +19,7 @@ class AddExpenseDTO
         $resultado = [];
         $resultado['description'] = $this->getDescription();
         $resultado['price'] = $this->getPrice();
+        $resultado['idNegocio'] = $this->getIdNegocio();
         $resultado['idSucursal'] = 1;
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $date = new DateTime();
@@ -46,14 +48,14 @@ class AddExpenseDTO
         return $this->price;
     }
 
-    public function setIdSucursal(int $idSucursal): void
+    public function setIdNegocio(int $idSucursal): void
     {
-        $this->id_sucursal = $idSucursal;
+        $this->id_negocio = $idSucursal;
     }
 
-    public function getIdSucursal(): int
+    public function getIdNegocio(): int
     {
-        return $this->id_sucursal;
+        return $this->id_negocio;
     }
 
     public function setDateExpense(string $date): void

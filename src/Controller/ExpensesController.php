@@ -17,12 +17,12 @@ class ExpensesController extends BaseController
 {
 
     /**
-     * @Route("/expenses", name="app_expenses_list", methods={"GET"})
+     * @Route("/expenses/{id_negocio}", name="app_expenses_list", methods={"GET"})
      */
-    public function expenses_list(Request $request, ValidatorInterface $validator, ExpenseService $expense_service): JsonResponse
+    public function expenses_list(Request $request, ValidatorInterface $validator, ExpenseService $expense_service, int $id_negocio): JsonResponse
     {
         try {
-            $list_expense = $expense_service->list_expense();
+            $list_expense = $expense_service->list_expense($id_negocio);
             return $this->respuesta(200, $list_expense, []);
         } catch (\Throwable $th) {
             //$log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());

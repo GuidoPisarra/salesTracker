@@ -15,3 +15,6 @@ App\DTO\SalesProduct\AddSalesProductDTO:
         typePayment:
             - NotBlank: 
                 message: 'El campo tipo de pago no puede quedar vacío.'
+        id_negocio:
+            - NotBlank: 
+                message: 'El campo id_negocio no puede quedar vacío.'

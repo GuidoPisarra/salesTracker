@@ -20,7 +20,8 @@ class AddSalesProductType extends AbstractType
             ->add('saleDay', TextType::class)
             ->add('quantity', IntegerType::class)
             ->add('price', MoneyType::class)
-            ->add('typePayment', TextType::class);
+            ->add('typePayment', TextType::class)
+            ->add('id_negocio', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

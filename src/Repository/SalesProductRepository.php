@@ -33,8 +33,9 @@ class SalesProductRepository extends BaseRepository
         foreach ($datosDto as $venta) {
             $newSale = $venta->to_array();
 
-            $querySale = $this->get_bbdd()->prepare('INSERT INTO sales (id_product) VALUES (:idProduct)');
+            $querySale = $this->get_bbdd()->prepare('INSERT INTO sales (id_product, id_negocio) VALUES (:idProduct, :idNegocio)');
             $querySale->bindParam(':idProduct', $newSale["idProduct"]);
+            $querySale->bindParam(':idNegocio', $newSale["id_negocio"]);
             $responseSale = $querySale->execute();
             //obtengo el ultimo id por unica vez, esto hay que mejorarlo
             if ($id_sale === -1) {
@@ -45,8 +46,8 @@ class SalesProductRepository extends BaseRepository
             }
 
             $query = $this->get_bbdd()->prepare('INSERT INTO sales_product 
-                (id_sale, id_product, quantity, price, sale_product_date, type_payment, active, register)
-                VALUES (:idSale, :idProduct, :quantity, :price, :saleDay, :typePayment, :active, :register)');
+                (id_sale, id_product, quantity, price, sale_product_date, type_payment, active, register,id_negocio)
+                VALUES (:idSale, :idProduct, :quantity, :price, :saleDay, :typePayment, :active, :register, :id_negocio)');
 
             $query->bindParam(':idSale', $idSALE);
             $query->bindParam(':idProduct', $newSale["idProduct"]);
@@ -56,6 +57,7 @@ class SalesProductRepository extends BaseRepository
             $query->bindParam(':typePayment', $newSale["typePayment"]);
             $query->bindParam(':active', $active);
             $query->bindParam(':register', $register);
+            $query->bindParam(':id_negocio', $newSale["id_negocio"]);
 
             $response = $query->execute();
             if (!$response || !$responseSale) {

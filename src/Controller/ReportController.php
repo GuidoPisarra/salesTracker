@@ -15,12 +15,12 @@ class ReportController extends BaseController
 {
 
     /**
-     * @Route("/salesProduct", name="app_salesProduct_report", methods={"GET"})
+     * @Route("/salesProduct/{id_negocio}", name="app_salesProduct_report", methods={"GET"})
      */
-    public function salesProduct_report(Request $request, ValidatorInterface $validator, ReportService $report_service): JsonResponse
+    public function salesProduct_report(Request $request, ValidatorInterface $validator, ReportService $report_service, int $id_negocio): JsonResponse
     {
         try {
-            $report_sales_product = $report_service->report_salesProduct();
+            $report_sales_product = $report_service->report_salesProduct($id_negocio);
             return $this->respuesta(200, $report_sales_product, []);
         } catch (\Throwable $th) {
             //$log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());
@@ -31,12 +31,12 @@ class ReportController extends BaseController
     }
 
     /**
-     * @Route("/incomesExpenses/{month}/{year}", name="app_incomes_expenses", methods={"GET"})
+     * @Route("/incomesExpenses/{month}/{year}/{id_negocio}", name="app_incomes_expenses", methods={"GET"})
      */
-    public function incomes_expenses_report(Request $request, ValidatorInterface $validator, ReportService $report_service, int $month, int $year): JsonResponse
+    public function incomes_expenses_report(Request $request, ValidatorInterface $validator, ReportService $report_service, int $month, int $year, int $id_negocio): JsonResponse
     {
         try {
-            $report_incomes_expenses = $report_service->report_incomes_expenses($month, $year);
+            $report_incomes_expenses = $report_service->report_incomes_expenses($month, $year, $id_negocio);
 
             return $this->respuesta(200, $report_incomes_expenses->to_array(), []);
         } catch (\Throwable $th) {

@@ -10,6 +10,7 @@ class AddSalesProductDTO
     protected $quantity;
     protected $price;
     protected $typePayment;
+    protected $id_negocio;
 
 
     public function to_array(): array
@@ -20,6 +21,7 @@ class AddSalesProductDTO
         $resultado['quantity'] = $this->getQuantity();
         $resultado['price'] = $this->getPrice();
         $resultado['typePayment'] = $this->getTypePayment();
+        $resultado['id_negocio'] = $this->getIdNegocio();
 
         return $resultado;
     }
@@ -72,5 +74,15 @@ class AddSalesProductDTO
     public function getTypePayment(): string
     {
         return $this->typePayment;
+    }
+
+    public function setIdNegocio(string $id_negocio): void
+    {
+        $this->id_negocio = $id_negocio;
+    }
+
+    public function getIdNegocio(): string
+    {
+        return $this->id_negocio;
     }
 }

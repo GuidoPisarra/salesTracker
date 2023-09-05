@@ -16,9 +16,9 @@ class ExpenseService
         $this->rep_expense = $rep_expense;
     }
 
-    public function list_expense()
+    public function list_expense(int $id_negocio)
     {
-        return $this->rep_expense->list_expense();
+        return $this->rep_expense->list_expense($id_negocio);
     }
 
     public function add_expense(AddExpenseDTO $dto)

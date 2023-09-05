@@ -17,7 +17,7 @@ class AddExpenseType extends AbstractType
         $builder
             ->add('description', TextType::class)
             ->add('price', MoneyType::class)
-            ->add('id_sucursal', IntegerType::class);
+            ->add('id_negocio', IntegerType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

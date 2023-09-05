@@ -14,14 +14,14 @@ class ReportService
         $this->rep_report = $rep_report;
     }
 
-    public function report_salesProduct()
+    public function report_salesProduct(int $id_negocio)
     {
-        return $this->rep_report->report_salesProduct();
+        return $this->rep_report->report_salesProduct($id_negocio);
     }
-    public function report_incomes_expenses(int $month, int $year): ReportIncomesExpensesDTO
+    public function report_incomes_expenses(int $month, int $year, $id_negocio): ReportIncomesExpensesDTO
     {
-        $expenses = $this->rep_report->report_expenses($month, $year);
-        $incomes = $this->rep_report->report_incomes($month, $year);
+        $expenses = $this->rep_report->report_expenses($month, $year, $id_negocio);
+        $incomes = $this->rep_report->report_incomes($month, $year, $id_negocio);
         $reponse = new ReportIncomesExpensesDTO($incomes, $expenses, ($incomes - $expenses));
         return $reponse;
     }

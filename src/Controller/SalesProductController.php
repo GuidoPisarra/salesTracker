@@ -53,6 +53,7 @@ class SalesProductController extends BaseController
             $dto->setPrice($venta['price']);
             $dto->setQuantity($venta['quantity']);
             $dto->setTypePayment($venta['typePayment']);
+            $dto->setIdNegocio($venta['id_negocio']);
             $this->createForm(AddSalesProductType::class, $dto);
             $errores = $this->obtener_validaciones($validator, $dto);
             if (count($errores) > 0) {
