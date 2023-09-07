@@ -10,10 +10,11 @@ class ReportIncomesExpensesDTO
     protected $difference;
 
 
-    public function __construct(float $incomes, float $expenses)
+    public function __construct(float $incomes, float $expenses, float $difference)
     {
         $this->incomes = $incomes;
         $this->egress = $expenses;
+        $this->difference = $difference;
     }
 
     public function to_array(): array
@@ -21,7 +22,9 @@ class ReportIncomesExpensesDTO
         $respuesta = [];
         $respuesta['incomes'] = $this->getIncomes();
         $respuesta['egress'] = $this->getEgress();
-        $respuesta['diference'] = $this->getDifference();
+        $respuesta['changes'] = $this->getDifference();
+        $respuesta['total'] = $this->getTotal();
+
         return $respuesta;
     }
 
@@ -45,6 +48,15 @@ class ReportIncomesExpensesDTO
 
     public function getDifference(): float
     {
-        return $this->getIncomes() - $this->getEgress();
+        return $this->difference;
+    }
+    public function setDifference(float $difference): void
+    {
+        $this->difference = $difference;
+    }
+
+    public function getTotal(): float
+    {
+        return $this->getIncomes() - $this->getEgress() + $this->getDifference();
     }
 }

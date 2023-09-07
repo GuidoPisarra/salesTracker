@@ -16,7 +16,7 @@ class ReportRepository extends BaseRepository
             JOIN  product p 
             ON p.id = sp.id_product 
             WHERE sp.active = 0 AND sp.id_negocio = :id_negocio
-            ORDER BY sp.sale_product_date DESC');
+            ORDER BY sp.sale_product_date ASC');
         $query->bindParam(':id_negocio', $negocio);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);

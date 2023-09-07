@@ -71,7 +71,7 @@ class ProductsRepository extends BaseRepository
 
     public function one_product(OneProductDTO $dto): array
     {
-        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price cost_price,sale_price sale_price,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code AND activo=0 AND id_negocio = :id_negocio');
+        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price costPrice,sale_price salePrice,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code AND activo=0 AND id_negocio = :id_negocio');
 
         $newProduct = $dto->to_array();
         $query->bindParam(':code', $newProduct["code"]);
