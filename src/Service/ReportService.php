@@ -25,6 +25,7 @@ class ReportService
         $cambios = $this->rep_change->list_changes($id_negocio);
         $resultado = [];
         $resultado['cambios'] = $cambios;
+        $ventasAgrupadas = [];
         foreach ($ventas as $venta) {
             $idVenta = $venta['id'];
 

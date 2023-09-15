@@ -24,7 +24,7 @@ class ReportRepository extends BaseRepository
         $salesProduct = $query->fetchAll();
 
         if (!$salesProduct) {
-            return null;
+            return [];
         }
 
         return $salesProduct;
