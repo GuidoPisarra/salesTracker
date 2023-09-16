@@ -46,10 +46,17 @@ class SalesProductController extends BaseController
         $datos = $request->request->all();
         $errores =  false;
         $datosDto = [];
+        $zonaHorariaArgentina = new \DateTimeZone('America/Argentina/Buenos_Aires');
+
+        // Obtener la fecha actual con la zona horaria de Argentina
+        $fechaArgentina = new \DateTime('now', $zonaHorariaArgentina);
+
+        // Formatear la fecha al formato deseado (YYYY-MM-DD)
+        $fechaFormateada = $fechaArgentina->format('Y-m-d');
         foreach ($datos as $venta) {
             $dto = new AddSalesProductDTO();
             $dto->setIdProduct($venta['idProduct']);
-            $dto->setSaleDay($venta['saleDay']);
+            $dto->setSaleDay($fechaFormateada);
             $dto->setPrice($venta['price']);
             $dto->setQuantity($venta['quantity']);
             $dto->setTypePayment($venta['typePayment']);
