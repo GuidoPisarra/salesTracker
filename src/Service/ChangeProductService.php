@@ -7,15 +7,17 @@ use App\Repository\ChangeProductRepository;
 
 class ChangeProductService
 {
-    protected $rep_expense;
+    protected $rep_change;
 
     public function __construct(ChangeProductRepository $rep_expense)
     {
-        $this->rep_expense = $rep_expense;
+        $this->rep_change = $rep_expense;
     }
 
     public function add_change(ChangeProductDTO $dto)
     {
-        return $this->rep_expense->add_change($dto);
+        $this->rep_change->add_change($dto);
+        $this->rep_change->add_stock($dto);
+        return $this->rep_change->discount_stock($dto);
     }
 }

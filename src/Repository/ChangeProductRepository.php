@@ -70,4 +70,34 @@ class ChangeProductRepository extends BaseRepository
 
         return $changes[0];
     }
+
+    public function add_stock(ChangeProductDTO $dto): bool
+    {
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity WHERE p.id = :id');
+
+        $newProduct = $dto->to_array();
+        $activo = 0;
+        $cant = 1;
+        $query->bindParam(':id', $newProduct["id_producto_cambio"]);
+        $query->bindParam(':quantity', $cant);
+
+        $response = $query->execute();
+
+        return $response;
+    }
+
+    public function discount_stock(ChangeProductDTO $dto): bool
+    {
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity - :quantity WHERE p.id = :id ');
+
+        $newProduct = $dto->to_array();
+        $activo = 0;
+        $cant = 1;
+        $query->bindParam(':id', $newProduct["id_producto_nuevo"]);
+        $query->bindParam(':quantity', $cant);
+
+        $response = $query->execute();
+
+        return $response;
+    }
 }
