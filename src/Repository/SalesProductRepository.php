@@ -60,6 +60,13 @@ class SalesProductRepository extends BaseRepository
             $query->bindParam(':id_negocio', $newSale["id_negocio"]);
 
             $response = $query->execute();
+
+            $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity - :quantity WHERE p.id = :id ');
+
+            $query->bindParam(':id', $newSale["idProduct"]);
+            $query->bindParam(':quantity', $newSale["quantity"]);
+
+            $response = $query->execute();
             if (!$response || !$responseSale) {
                 $save_ok = false;
             }
