@@ -52,7 +52,7 @@ class SalesProductController extends BaseController
         $fechaArgentina = new \DateTime('now', $zonaHorariaArgentina);
 
         // Formatear la fecha al formato deseado (YYYY-MM-DD)
-        $fechaFormateada = $fechaArgentina->format('Y-m-d');
+        $fechaFormateada = $fechaArgentina->format('Y-m-d H:m:s');
         foreach ($datos as $venta) {
             $dto = new AddSalesProductDTO();
             $dto->setIdProduct($venta['idProduct']);
