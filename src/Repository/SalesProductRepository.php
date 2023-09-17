@@ -46,8 +46,8 @@ class SalesProductRepository extends BaseRepository
             }
 
             $query = $this->get_bbdd()->prepare('INSERT INTO sales_product 
-                (id_sale, id_product, quantity, price, sale_product_date, type_payment, active, register,id_negocio)
-                VALUES (:idSale, :idProduct, :quantity, :price, :saleDay, :typePayment, :active, :register, :id_negocio)');
+                (id_sale, id_product, quantity, price, sale_product_date, type_payment, active, register,id_negocio, id_persona)
+                VALUES (:idSale, :idProduct, :quantity, :price, :saleDay, :typePayment, :active, :register, :id_negocio, :id_persona)');
 
             $query->bindParam(':idSale', $idSALE);
             $query->bindParam(':idProduct', $newSale["idProduct"]);
@@ -58,6 +58,7 @@ class SalesProductRepository extends BaseRepository
             $query->bindParam(':active', $active);
             $query->bindParam(':register', $register);
             $query->bindParam(':id_negocio', $newSale["id_negocio"]);
+            $query->bindParam(':id_persona', $newSale["id_persona"]);
 
             $response = $query->execute();
 

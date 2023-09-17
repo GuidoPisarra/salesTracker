@@ -11,7 +11,7 @@ class AddSalesProductDTO
     protected $price;
     protected $typePayment;
     protected $id_negocio;
-
+    protected $id_persona;
 
     public function to_array(): array
     {
@@ -22,6 +22,7 @@ class AddSalesProductDTO
         $resultado['price'] = $this->getPrice();
         $resultado['typePayment'] = $this->getTypePayment();
         $resultado['id_negocio'] = $this->getIdNegocio();
+        $resultado['id_persona'] = $this->getIdPersona();
 
         return $resultado;
     }
@@ -84,5 +85,15 @@ class AddSalesProductDTO
     public function getIdNegocio(): string
     {
         return $this->id_negocio;
+    }
+
+    public function setIdPersona(string $id_persona): void
+    {
+        $this->id_persona = $id_persona;
+    }
+
+    public function getIdPersona(): string
+    {
+        return $this->id_persona;
     }
 }
