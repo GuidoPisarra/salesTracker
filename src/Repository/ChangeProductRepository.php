@@ -23,7 +23,7 @@ class ChangeProductRepository extends BaseRepository
         $changes = $query->fetchAll();
 
         if (!$changes) {
-            return null;
+            return [];
         }
 
         return $changes;

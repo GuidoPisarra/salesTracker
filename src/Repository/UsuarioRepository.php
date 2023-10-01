@@ -46,13 +46,14 @@ class UsuarioRepository extends BaseRepository
     public function registrar_usuario(RegistrarUsuarioDTO $user): void
     {
         $user = $user->to_array();
-
-        $query = $this->get_bbdd()->prepare("INSERT INTO user  (email, name, password, role) VALUES (:email, :nombre, :password, :role)");
+        $id = 2;
+        $query = $this->get_bbdd()->prepare("INSERT INTO user  (email, name, password, role, id_negocio) VALUES (:email, :nombre, :password, :role, :idNegocio)");
         $role = json_encode(["ROLE_USER"]);
         $query->bindParam(':email', $user['email']);
         $query->bindParam(':nombre', $user['nombre']);
         $query->bindParam(':password', $user['password']);
         $query->bindParam(':role', $role);
+        $query->bindParam(':idNegocio', $id);
         $res = $query->execute();
     }
 
