@@ -47,4 +47,20 @@ class ProductsService
     {
         return $this->rep_products->add_products_stcok($dto);
     }
+
+    public function trasladar_product(array $datos_dto)
+    {
+        $productos = [];
+        foreach ($datos_dto as $prod) {
+            $producto_buscado = $this->rep_products->get_one_product($prod);
+            if (!$producto_buscado) { //el producto no existe en la sucursal
+                $this->rep_products->crear_producto_sucursal($prod);
+                $this->rep_products->actualizar_stock_sucursal_anterior($prod); //sucursal anterior
+            } else { //el producto existe en la sucursal
+                $this->rep_products->actualizar_stock_sucursal_nueva($prod); //sucursal nueva                
+                $this->rep_products->actualizar_stock_sucursal_anterior($prod); //sucursal anterior                
+            }
+        }
+        return true;
+    }
 }

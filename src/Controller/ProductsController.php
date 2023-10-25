@@ -6,10 +6,12 @@ use App\DTO\Products\AddProductDTO;
 use App\DTO\Products\AddStockDTO;
 use App\DTO\Products\DeleteProductDTO;
 use App\DTO\Products\OneProductDTO;
+use App\DTO\Products\TrasladoProductDTO;
 use App\Form\Type\Productos\AddProductType;
 use App\Form\Type\Productos\AddStockType;
 use App\Form\Type\Productos\DeleteProductType;
 use App\Form\Type\Productos\OneProductType;
+use App\Form\Type\Productos\TrasladoProductType;
 use App\Service\ProductsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -208,5 +210,60 @@ class ProductsController extends BaseController
         }
         // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
         return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
+    }
+
+
+
+    /**
+     * @Route("/trasladar_products", name="app_trasladar_products", methods={"POST"})
+     */
+    public function trasladar_productos(Request $request, ValidatorInterface $validator, ProductsService $product_service): JsonResponse
+    {
+        $this->request_to_json($request);
+
+        $datos = $request->request->all();
+        $errores =  false;
+        $datosDto = [];
+
+        foreach ($datos as $producto) {
+            $dto = new TrasladoProductDTO();
+            $dto->setCode($producto['code']);
+            $dto->setCodeCanvas($producto['codeCanvas']);
+            $dto->setCostPrice($producto['costPrice']);
+            $dto->setDescription($producto['description']);
+            $dto->setId($producto['id']);
+            $dto->setIdProveedor($producto['idProveedor']);
+            $dto->setIdNegocio($producto['id_negocio']);
+            $dto->setQuantity($producto['quantity']);
+            $dto->setSalePrice($producto['salePrice']);
+            $dto->setSize($producto['size']);
+            $dto->setSucursal($producto['sucursal']);
+            $dto->setSucursalNueva($producto['sucursal_nueva']);
+
+            $this->createForm(TrasladoProductType::class, $dto);
+            $errores = $this->obtener_validaciones($validator, $dto);
+            if (count($errores) > 0) {
+                $errores = true;
+            }
+            array_push($datosDto, $dto);
+        }
+
+        if (count($errores) > 0) {
+            //$this->errores_to_log($errores, $log, 'app_agregar_productos');
+            return $this->respuesta(400, [], $errores, 400);
+        }
+
+        if (!$errores) {
+            try {
+                $sales_product = $product_service->trasladar_product($datosDto);
+                return $this->respuesta(200, [$sales_product], []);
+            } catch (\Throwable $th) {
+                //$log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());
+                return $this->respuesta(400, [], ['Ocurrió un error al obtener los productos.'], 400);
+            }
+            // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
+            return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
+        }
+        return $this->respuesta(400, $datosDto, ['Ocurrió un error desconocido.'], 400);
     }
 }
