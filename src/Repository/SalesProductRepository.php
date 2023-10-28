@@ -68,6 +68,31 @@ class SalesProductRepository extends BaseRepository
             $query->bindParam(':quantity', $newSale["quantity"]);
 
             $response = $query->execute();
+
+            if ($newSale["typePayment"] === 'Cta Cte') {
+                $querySaleProduct = $this->get_bbdd()->prepare('SELECT id_sales_product FROM sales_product ORDER BY id_sales_product DESC LIMIT 1');
+                $responseSale = $querySaleProduct->execute();
+                $id_sale_product = $querySaleProduct->fetch(PDO::FETCH_ASSOC);
+                $idSALEPRODUCT = $id_sale_product['id_sales_product'];
+
+                $queryCtaCte = $this->get_bbdd()->prepare('INSERT INTO ctacte 
+    (id_producto, id_sale, id_sale_product, id_persona, precio_original, precio_actual, id_negocio, sucursal, fecha_venta)
+    VALUES (:idProduct, :idSale, :idSaleProduct, :id_persona, :priceOriginal, :priceActual, :id_negocio, :sucursal, :saleDay)');
+
+
+                $queryCtaCte->bindParam(':idProduct', $newSale["idProduct"]);
+                $queryCtaCte->bindParam(':idSale', $idSALE);
+                $queryCtaCte->bindParam(':idSaleProduct', $idSALEPRODUCT);
+                $queryCtaCte->bindParam(':id_persona', $newSale["id_persona"]);
+                $queryCtaCte->bindParam(':priceOriginal', $newSale["price"]);
+                $queryCtaCte->bindParam(':priceActual', $newSale["price"]);
+                $queryCtaCte->bindParam(':id_negocio', $newSale["id_negocio"]);
+                $queryCtaCte->bindParam(':sucursal', $newSale["sucursal"]);
+                $queryCtaCte->bindParam(':saleDay', $newSale["saleDay"]);
+                $responseCtaCte = $queryCtaCte->execute();
+            }
+
+
             if (!$response || !$responseSale) {
                 $save_ok = false;
             }

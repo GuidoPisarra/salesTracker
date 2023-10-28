@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\DTO\Expenses\AddExpenseDTO;
-use App\Form\Type\Expenses\AddExpenseType;
+use App\DTO\CuentaCorriente\NuevaVentaCtaCteDTO;
+use App\Form\Type\CuentaCorriente\NuevaVentaCtaCteType;
 use App\Service\CuentaCorrienteService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,8 +54,8 @@ class CuentaCorrienteController extends BaseController
     public function add_agregar_venta_cuenta_corriente(Request $request, ValidatorInterface $validator, CuentaCorrienteService $service): JsonResponse
     {
         $this->request_to_json($request);
-        $dto = new AddExpenseDTO();
-        $form = $this->createForm(AddExpenseType::class, $dto);
+        $dto = new NuevaVentaCtaCteDTO();
+        $form = $this->createForm(NuevaVentaCtaCteType::class, $dto);
         $form->handleRequest($request);
 
         $errores = $this->obtener_validaciones($validator, $dto);
@@ -64,22 +64,21 @@ class CuentaCorrienteController extends BaseController
             return $this->respuesta(400, [], $errores, 400);
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                /*  $resultado = $service->add_expense($dto);
-                if ($resultado !== true) {
-                    //$log::get_log()->error('ENDPOINT: app_agregar_gastos ERROR: Ocurrió un error grabando el gasto.');
-                    throw new \Exception("Ocurrió un error al agregar el producto.");
-                } */
-                $respuesta = [
-                    'OK' => 'OK'
-                ];
-                return $this->respuesta(200, $respuesta, []);
-            } catch (\Throwable $th) {
-                //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: ' . $th->getMessage());
-                return $this->respuesta(400, [], [$th->getMessage()], 400);
+        try {
+             $resultado = $service->add_agregar_venta_cuenta_corriente($dto);
+            if ($resultado !== true) {
+                //$log::get_log()->error('ENDPOINT: app_agregar_gastos ERROR: Ocurrió un error grabando el gasto.');
+                throw new \Exception("Ocurrió un error al agregar el producto.");
             }
+            $respuesta = [
+                'OK' => 'OK'
+            ];
+            return $this->respuesta(200, $respuesta, []);
+        } catch (\Throwable $th) {
+            //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: ' . $th->getMessage());
+            return $this->respuesta(400, [], [$th->getMessage()], 400);
         }
+
         // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
         return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
     }

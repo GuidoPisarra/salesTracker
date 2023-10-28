@@ -63,4 +63,8 @@ class CuentaCorrienteRepository extends BaseRepository
 
         return $expenses;
     }
+
+    public function add_agregar_venta_cuenta_corriente()
+    {
+    }
 }
