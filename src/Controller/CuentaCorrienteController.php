@@ -19,7 +19,7 @@ class CuentaCorrienteController extends BaseController
     /**
      * @Route("/obtener_cuentas_corrientes/{id_negocio}", name="app_obtener_cuentas_corrientes", methods={"GET"})
      */
-    public function expenses_list(Request $request, ValidatorInterface $validator, CuentaCorrienteService $service, int $id_negocio): JsonResponse
+    public function cuentas_list(Request $request, ValidatorInterface $validator, CuentaCorrienteService $service, int $id_negocio): JsonResponse
     {
         try {
             $list_cuentas_corrientes = $service->list_cuentas_corrientes($id_negocio);
@@ -31,10 +31,27 @@ class CuentaCorrienteController extends BaseController
         // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
         return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
     }
+
     /**
-     * @Route("/expenses", name="app_add_expense", methods={"POST"})
+     * @Route("/obtener_cuentas_corrientes_con_deuda/{id_negocio}", name="app_obtener_cuentas_corrientes_con_deuda", methods={"GET"})
      */
-    public function add_expense(Request $request, ValidatorInterface $validator, CuentaCorrienteService $service): JsonResponse
+    public function cuentass_list_con_deuda(Request $request, ValidatorInterface $validator, CuentaCorrienteService $service, int $id_negocio): JsonResponse
+    {
+        try {
+            $list_cuentas_corrientes = $service->list_cuentas_corrientes_con_deuda($id_negocio);
+            return $this->respuesta(200, $list_cuentas_corrientes, []);
+        } catch (\Throwable $th) {
+            //$log::get_log()->error('ENDPOINT: registrar_email ERROR: ' . $th->getMessage());
+            return $this->respuesta(400, [], ['Ocurrió un error al obtener los productos.'], 400);
+        }
+        // $log::get_log()->error('ENDPOINT: registrar_email ERROR: Ocurrió un error desconocido.');
+        return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
+    }
+
+    /**
+     * @Route("/agregar_venta_cuenta_corriente", name="app_agregar_venta_cuenta_corriente", methods={"POST"})
+     */
+    public function add_agregar_venta_cuenta_corriente(Request $request, ValidatorInterface $validator, CuentaCorrienteService $service): JsonResponse
     {
         $this->request_to_json($request);
         $dto = new AddExpenseDTO();
