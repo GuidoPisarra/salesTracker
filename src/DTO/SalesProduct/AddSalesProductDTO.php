@@ -26,6 +26,7 @@ class AddSalesProductDTO
         $resultado['id_negocio'] = $this->getIdNegocio();
         $resultado['sucursal'] = $this->getIdNegocio();
         $resultado['id_persona'] = $this->getIdPersona();
+        $resultado['usuario'] = $this->getUsuario();
 
         return $resultado;
     }
@@ -105,7 +106,7 @@ class AddSalesProductDTO
         $this->id_persona = $id_persona;
     }
 
-    public function getIdPersona(): string
+    public function getIdPersona(): ?string
     {
         return $this->id_persona;
     }
@@ -115,7 +116,7 @@ class AddSalesProductDTO
         $this->usuario = $usuario;
     }
 
-    public function getUsuario(): int
+    public function getUsuario(): ?int
     {
         return $this->usuario;
     }

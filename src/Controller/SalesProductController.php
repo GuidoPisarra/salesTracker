@@ -52,16 +52,17 @@ class SalesProductController extends BaseController
         $fechaArgentina = new \DateTime('now', $zonaHorariaArgentina);
 
         // Formatear la fecha al formato deseado (YYYY-MM-DD)
-        $fechaFormateada = $fechaArgentina->format('Y-m-d H:m:s');
+        $fechaFormateada = $fechaArgentina->format('Y-m-d H:i:s');
         foreach ($datos as $venta) {
             $dto = new AddSalesProductDTO();
-            $dto->setIdProduct($venta['idProduct']);
+            $dto->setIdProduct($venta['id']);
             $dto->setSaleDay($fechaFormateada);
-            $dto->setPrice($venta['price']);
+            $dto->setPrice($venta['salePrice']);
             $dto->setQuantity($venta['quantity']);
             $dto->setTypePayment($venta['typePayment']);
             $dto->setIdNegocio($venta['id_negocio']);
-            $dto->setIdPersona($venta['id_persona']);
+            $dto->setSucursal($venta['sucursal']);
+            $dto->setUsuario($venta['usuario']);
             $this->createForm(AddSalesProductType::class, $dto);
             $errores = $this->obtener_validaciones($validator, $dto);
             if (count($errores) > 0) {

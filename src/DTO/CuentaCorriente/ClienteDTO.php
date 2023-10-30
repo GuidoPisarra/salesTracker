@@ -2,8 +2,6 @@
 
 namespace App\DTO\CuentaCorriente;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
 class ClienteDTO
 {
 
@@ -14,7 +12,7 @@ class ClienteDTO
     protected $id_negocio;
     protected $telefono;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -54,7 +52,7 @@ class ClienteDTO
         $this->apellido = $apellido;
     }
 
-    public function getTelefono(): string
+    public function getTelefono(): ?string
     {
         return $this->telefono;
     }
