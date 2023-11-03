@@ -17,7 +17,7 @@ class ClientesRepository extends BaseRepository
         $clientes = $query->fetchAll();
 
         if (!$clientes) {
-            return null;
+            return [];
         }
 
         return $clientes;
