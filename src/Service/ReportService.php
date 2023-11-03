@@ -61,7 +61,9 @@ class ReportService
         $expenses = $this->rep_report->report_expenses($month, $year, $id_negocio);
         $incomes = $this->rep_report->report_incomes($month, $year, $id_negocio);
         $changes = $this->rep_change->report_changes($month, $year, $id_negocio);
-
+        if ($changes < 0) {
+            $changes = $changes * (-1);
+        }
         $response = new ReportIncomesExpensesDTO($incomes, $expenses,  $changes);
 
         return $response;
