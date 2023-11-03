@@ -28,7 +28,7 @@ class CuentaCorrienteRepository extends BaseRepository
         $expenses = $query->fetchAll();
 
         if (!$expenses) {
-            return null;
+            return [];
         }
 
         return $expenses;
