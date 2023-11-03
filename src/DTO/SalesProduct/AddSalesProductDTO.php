@@ -24,7 +24,7 @@ class AddSalesProductDTO
         $resultado['price'] = $this->getPrice();
         $resultado['typePayment'] = $this->getTypePayment();
         $resultado['id_negocio'] = $this->getIdNegocio();
-        $resultado['sucursal'] = $this->getIdNegocio();
+        $resultado['sucursal'] = $this->getSucursal();
         $resultado['id_persona'] = $this->getIdPersona();
         $resultado['usuario'] = $this->getUsuario();
 
