@@ -21,7 +21,7 @@ class ProveedoresRepository extends BaseRepository
         $proveedores = $query->fetchAll();
 
         if (!$proveedores) {
-            return null;
+            return [];
         }
 
         return $proveedores;
