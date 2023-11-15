@@ -52,7 +52,7 @@ class ProductsService
     {
         $productos = [];
         foreach ($datos_dto as $prod) {
-            $producto_buscado = $this->rep_products->get_one_product($prod);
+            $producto_buscado = $this->rep_products->get_one_product_traslado($prod);
             if (!$producto_buscado) { //el producto no existe en la sucursal
                 $this->rep_products->crear_producto_sucursal($prod);
                 $this->rep_products->actualizar_stock_sucursal_anterior($prod); //sucursal anterior
@@ -60,6 +60,7 @@ class ProductsService
                 $this->rep_products->actualizar_stock_sucursal_nueva($prod); //sucursal nueva                
                 $this->rep_products->actualizar_stock_sucursal_anterior($prod); //sucursal anterior                
             }
+            $this->rep_products->eliminar_producto_sin_stock($prod);
         }
         return true;
     }

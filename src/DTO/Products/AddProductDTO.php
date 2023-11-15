@@ -13,6 +13,7 @@ class AddProductDTO
     protected $code;
     protected $size;
     protected $idNegocio;
+    protected $idSucursal;
 
     public function to_array(): array
     {
@@ -25,6 +26,7 @@ class AddProductDTO
         $resultado['code'] = $this->getCode();
         $resultado['size'] = $this->getSize();
         $resultado['id_negocio'] = $this->getIdNegocio();
+        $resultado['id_sucursal'] = $this->getIdSucursal();
 
         return $resultado;
     }
@@ -107,5 +109,15 @@ class AddProductDTO
     public function getIdNegocio(): string
     {
         return $this->idNegocio;
+    }
+
+    public function setIdSucursal(string $id_sucursal): void
+    {
+        $this->idSucursal = $id_sucursal;
+    }
+
+    public function getIdSucursal(): string
+    {
+        return $this->idSucursal;
     }
 }

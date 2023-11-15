@@ -22,6 +22,7 @@ class AddProductType extends AbstractType
             ->add('idProveedor', IntegerType::class)
             ->add('size', TextType::class)
             ->add('code', TextType::class)
+            ->add('idSucursal', TextType::class)
             ->add('idNegocio', TextType::class);
     }
 

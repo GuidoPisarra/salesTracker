@@ -44,8 +44,8 @@ class ProductsRepository extends BaseRepository
     {
 
         $query = $this->get_bbdd()->prepare('INSERT INTO product 
-        (description, cost_price, sale_price, quantity, id_proveedor, code, size, activo, id_negocio)
-        VALUES (:description, :costPrice, :salePrice, :quantity, :idProveedor, :code, :size, :activo, :id_negocio)');
+        (description, cost_price, sale_price, quantity, id_proveedor, code, size, activo, id_negocio, sucursal)
+        VALUES (:description, :costPrice, :salePrice, :quantity, :idProveedor, :code, :size, :activo, :id_negocio, :id_sucursal)');
 
         $newProduct = $dto->to_array();
         $activo = 0;
@@ -58,6 +58,7 @@ class ProductsRepository extends BaseRepository
         $query->bindParam(':size', $newProduct["size"]);
         $query->bindParam(':activo', $activo);
         $query->bindParam(':id_negocio', $newProduct["id_negocio"]);
+        $query->bindParam(':id_sucursal', $newProduct["id_sucursal"]);
 
         $response = $query->execute();
         return $response;
@@ -159,7 +160,7 @@ class ProductsRepository extends BaseRepository
 
     public function actualizar_stock_sucursal_nueva(TrasladoProductDTO $dto)
     {
-        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity WHERE p.id_negocio= :id_negocio AND p.code = :code AND p.activo = 0 AND sucursal = :sucursal');
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity, p.activo = 0 WHERE p.id_negocio= :id_negocio AND p.code = :code AND sucursal = :sucursal');
 
         $newProduct = $dto->to_array();
         $activo = 0;
@@ -186,5 +187,36 @@ class ProductsRepository extends BaseRepository
 
         $response = $query->execute();
         return $response;
+    }
+
+    public function eliminar_producto_sin_stock(TrasladoProductDTO $dto)
+    {
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET activo = :activo  WHERE p.id = :id  AND sucursal = :sucursal AND p.quantity = 0 ');
+
+        $newProduct = $dto->to_array();
+        $activo = 1;
+        $query->bindParam(':id', $newProduct["id"]);
+        $query->bindParam(':sucursal', $newProduct["sucursal"]);
+        $query->bindParam(':activo', $activo);
+
+
+        $response = $query->execute();
+        return $response;
+    }
+
+    public function get_one_product_traslado(TrasladoProductDTO $prod)
+    {
+        $query = $this->get_bbdd()->prepare('SELECT id id, description description,sucursal sucursal,cost_price costPrice,sale_price salePrice,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code  AND id_negocio = :id_negocio AND sucursal = :sucursal_nueva');
+
+        $prod = $prod->to_array();
+        $query->bindParam(':id_negocio', $prod['id_negocio']);
+        $query->bindParam(':code', $prod['code']);
+        $query->bindParam(':sucursal_nueva', $prod['sucursalNueva']);
+
+        $query->execute();
+        $query->setFetchMode(PDO::FETCH_ASSOC);
+        $product = $query->fetch();
+
+        return $product;
     }
 }
