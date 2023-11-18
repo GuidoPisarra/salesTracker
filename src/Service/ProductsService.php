@@ -65,4 +65,11 @@ class ProductsService
         }
         return true;
     }
+
+
+    public function one_product_sin_token(OneProductDTO $dto)
+    {
+        $dto->setCode(str_replace(';', '-', $dto->getCode()));
+        return $this->rep_products->one_product_sin_token($dto);
+    }
 }
