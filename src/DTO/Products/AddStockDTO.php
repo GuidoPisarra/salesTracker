@@ -22,7 +22,7 @@ class AddStockDTO
         $resultado['costPrice'] = $this->getCostPrice();
         $resultado['salePrice'] = $this->getSalePrice();
         $resultado['quantity'] = $this->getQuantity();
-        $resultado['idProveedor'] = 1;
+        $resultado['idProveedor'] = $this->getIdProveedor();
         $resultado['code'] = $this->getCode();
         $resultado['size'] = $this->getSize();
 

@@ -38,9 +38,10 @@ class ProductsService
         return $this->rep_products->one_product($dto);
     }
 
-    public function products_price_percentage(float $percentage, int $id_negocio)
+    public function products_price_percentage(float $percentage, int $id_negocio, int $proveedor)
     {
-        return $this->rep_products->products_price_percentage($percentage, $id_negocio);
+        $this->rep_products->actualizar_cta_cte($percentage, $id_negocio, $proveedor);
+        return $this->rep_products->products_price_percentage($percentage, $id_negocio, $proveedor);
     }
 
     public function add_stock_product(AddStockDTO $dto)

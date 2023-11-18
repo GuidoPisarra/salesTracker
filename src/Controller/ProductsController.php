@@ -148,9 +148,9 @@ class ProductsController extends BaseController
     }
 
     /**
-     * @Route("/products/price_percent/{percentage}/{id_negocio}", name="app_products_price_percent", methods={"GET"})
+     * @Route("/products/price_percent/{percentage}/{id_negocio}/{proveedor}", name="app_products_price_percent", methods={"GET"})
      */
-    public function percentage_price_product(ValidatorInterface $validator, ProductsService $products_service, $percentage, $id_negocio): JsonResponse
+    public function percentage_price_product(ValidatorInterface $validator, ProductsService $products_service, $percentage, $id_negocio, $proveedor): JsonResponse
     {
         if ($percentage === null || $id_negocio === null) {
             //$this->errores_to_log($errores, $log, 'app_agregar_productos');
@@ -158,7 +158,7 @@ class ProductsController extends BaseController
         }
 
         try {
-            $resultado = $products_service->products_price_percentage($percentage, $id_negocio);
+            $resultado = $products_service->products_price_percentage($percentage, $id_negocio, $proveedor);
             if ($resultado !== true) {
                 //$log::get_log()->error('ENDPOINT: app_agregar_productos ERROR: Ocurrió un error grabando el producto.');
                 throw new \Exception("Ocurrió un error al buscar el producto.");
@@ -265,5 +265,40 @@ class ProductsController extends BaseController
             return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
         }
         return $this->respuesta(400, $datosDto, ['Ocurrió un error desconocido.'], 400);
+    }
+
+    /**
+     * @Route("/editOneProduct", name="app_editOneProduct", methods={"POST"})
+     */
+    public function editOneProduct(Request $request, ValidatorInterface $validator, ProductsService $product_service): JsonResponse
+    {
+        $this->request_to_json($request);
+        $dto = new AddStockDTO;
+        $form = $this->createForm(AddStockType::class, $dto);
+        $form->handleRequest($request);
+
+        $errores = $this->obtener_validaciones($validator, $dto);
+        if (count($errores) > 0) {
+            //$this->errores_to_log($errores, $log, 'app_agregar_productos');
+            return $this->respuesta(400, [], $errores, 400);
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $resultado = $product_service->add_stock_product($dto);
+                if ($resultado !== true) {
+                    //$log::get_log()->error('ENDPOINT: app_editOneProduct ERROR: Ocurrió un error editando el producto.');
+                    throw new \Exception("Ocurrió un error al editar el producto.");
+                }
+                $respuesta = [
+                    'OK' => 'OK'
+                ];
+                return $this->respuesta(200, $respuesta, []);
+            } catch (\Throwable $th) {
+                //$log::get_log()->error('ENDPOINT: app_editOneProduct ERROR: ' . $th->getMessage());
+                return $this->respuesta(400, [], [$th->getMessage()], 400);
+            }
+        }
+        // $log::get_log()->error('ENDPOINT: app_editOneProduct ERROR: Ocurrió un error desconocido.');
+        return $this->respuesta(400, [], ['Ocurrió un error desconocido.'], 400);
     }
 }

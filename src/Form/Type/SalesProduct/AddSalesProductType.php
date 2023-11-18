@@ -17,6 +17,7 @@ class AddSalesProductType extends AbstractType
     {
         $builder
             ->add('idProduct', IntegerType::class)
+            ->add('idProveedor', IntegerType::class)
             ->add('saleDay', TextType::class)
             ->add('quantity', IntegerType::class)
             ->add('price', MoneyType::class)

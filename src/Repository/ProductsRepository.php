@@ -91,28 +91,56 @@ class ProductsRepository extends BaseRepository
         return $product;
     }
 
-    public function products_price_percentage(float $percentage, int $id_negocio): bool
+    public function products_price_percentage(float $percentage, int $id_negocio, int $proveedor): bool
     {
         $percent = (float) $percentage;
         $negocio = $id_negocio;
-        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)) WHERE p.activo = 0 AND id_negocio = :id_negocio');
+        $query_proveedor = ($proveedor !== 0) ? ' AND id_proveedor = :proveedor' : '';
+
+        $query = $this->get_bbdd()->prepare("UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)) WHERE p.activo = 0 AND id_negocio = :id_negocio" . $query_proveedor);
 
         $query->bindParam(':percent', $percent);
         $query->bindParam(':id_negocio', $negocio);
+        if ($proveedor !== 0) {
+            $query->bindParam(':proveedor', $proveedor);
+        }
         $response = $query->execute();
 
 
         return $response;
     }
 
+    public function actualizar_cta_cte(float $percentage, int $id_negocio, int $proveedor): bool
+    {
+        $percent = (float) $percentage;
+        $negocio = $id_negocio;
+        $query_proveedor = ($proveedor !== 0) ? ' AND id_proveedor = :proveedor' : '';
+
+        $query = $this->get_bbdd()->prepare("UPDATE ctacte cuenta SET cuenta.precio_actual =CEIL( cuenta.precio_actual +((cuenta.precio_actual  * :percent )/100)) WHERE id_negocio = :id_negocio" . $query_proveedor);
+
+        $query->bindParam(':percent', $percent);
+        $query->bindParam(':id_negocio', $negocio);
+        if ($proveedor !== 0) {
+            $query->bindParam(':proveedor', $proveedor);
+        }
+        $response = $query->execute();
+
+
+        return $response;
+    }
+
+
+
     public function add_products_stcok(AddStockDTO $dto): bool
     {
-        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity WHERE p.id = :id AND p.activo = 0');
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity, p.cost_price = :costo, p.sale_price = :venta WHERE p.id = :id AND p.activo = 0');
 
         $newProduct = $dto->to_array();
         $activo = 0;
         $query->bindParam(':id', $newProduct["id"]);
         $query->bindParam(':quantity', $newProduct["quantity"]);
+        $query->bindParam(':costo', $newProduct["costPrice"]);
+        $query->bindParam(':venta', $newProduct["salePrice"]);
 
         $response = $query->execute();
         return $response;

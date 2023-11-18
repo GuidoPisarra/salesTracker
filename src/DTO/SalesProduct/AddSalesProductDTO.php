@@ -6,6 +6,7 @@ namespace App\DTO\SalesProduct;
 class AddSalesProductDTO
 {
     protected $idProduct;
+    protected $idProveedor;
     protected $saleDay;
     protected $quantity;
     protected $price;
@@ -19,6 +20,7 @@ class AddSalesProductDTO
     {
         $resultado = [];
         $resultado['idProduct'] = $this->getIdProduct();
+        $resultado['idProveedor'] = $this->getIdProveedor();
         $resultado['saleDay'] = $this->getSaleDay();
         $resultado['quantity'] = $this->getQuantity();
         $resultado['price'] = $this->getPrice();
@@ -39,6 +41,16 @@ class AddSalesProductDTO
     public function getIdProduct(): int
     {
         return $this->idProduct;
+    }
+
+    public function setIdProveedor(int $idProveedor): void
+    {
+        $this->idProveedor = $idProveedor;
+    }
+
+    public function getIdProveedor(): int
+    {
+        return $this->idProveedor;
     }
 
     public function setSaleDay(string $saleDay): void

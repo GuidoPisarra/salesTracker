@@ -30,6 +30,7 @@ class AddStockType extends AbstractType
         $resolver->setDefaults([
             'data_class'        => AddStockDTO::class,
             'csrf_protection'   => false,
+            'allow_extra_fields' => true
         ]);
     }
 
