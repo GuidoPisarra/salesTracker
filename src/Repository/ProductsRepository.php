@@ -20,7 +20,7 @@ class ProductsRepository extends BaseRepository
     {
         $query = $this->get_bbdd()->prepare('SELECT p.id AS id, n.sucursal AS sucursal, n.nombre AS nombreSucursal, p.description AS description,
             p.cost_price AS cost_price, p.sale_price AS sale_price, p.quantity AS quantity, 
-            p.id_proveedor AS id_proveedor, p.code AS code, p.size AS size, p.activo AS activo
+            p.id_proveedor AS id_proveedor, p.code AS code, p.size AS size, p.activo AS activo, p.codigo_interno AS codigoInterno
         FROM product p
         INNER JOIN negocio n ON n.id_negocio = p.id_negocio AND n.sucursal = p.sucursal
         WHERE p.activo = :activo AND p.id_negocio = :local 
