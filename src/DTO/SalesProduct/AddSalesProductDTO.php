@@ -48,7 +48,7 @@ class AddSalesProductDTO
         $this->idProveedor = $idProveedor;
     }
 
-    public function getIdProveedor(): int
+    public function getIdProveedor(): ?int
     {
         return $this->idProveedor;
     }
