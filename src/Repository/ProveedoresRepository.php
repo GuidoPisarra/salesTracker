@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTO\Proveedores\AddProveedorDTO;
 use PDO;
 
 class ProveedoresRepository extends BaseRepository
@@ -25,5 +26,23 @@ class ProveedoresRepository extends BaseRepository
         }
 
         return $proveedores;
+    }
+
+    public function add_proveedor(AddProveedorDTO $dto)
+    {
+        $query = $this->get_bbdd()->prepare('INSERT INTO proveedores 
+        (nombre, telefono, calle, numero_calle, ciudad, id_negocio)
+        VALUES (:nombre, :telefono, :calle, :numero, :ciudad, :id_negocio)');
+
+        $newProveedor = $dto->to_array();
+        $query->bindParam(':nombre', $newProveedor["nombre"]);
+        $query->bindParam(':telefono', $newProveedor["telefono"]);
+        $query->bindParam(':calle', $newProveedor["calle"]);
+        $query->bindParam(':numero', $newProveedor["numero"]);
+        $query->bindParam(':ciudad', $newProveedor["ciudad"]);
+        $query->bindParam(':id_negocio', $newProveedor["id_negocio"]);
+
+        $response = $query->execute();
+        return $response;
     }
 }

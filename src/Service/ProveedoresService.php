@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DTO\Proveedores\AddProveedorDTO;
 use App\Repository\ProveedoresRepository;
 
 class ProveedoresService
@@ -16,5 +17,10 @@ class ProveedoresService
     public function list_proveedores(int $id_local)
     {
         return $this->rep_products->list_proveedores($id_local);
+    }
+
+    public function add_proveedor(AddProveedorDTO $dto)
+    {
+        return $this->rep_products->add_proveedor($dto);
     }
 }

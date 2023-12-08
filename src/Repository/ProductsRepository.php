@@ -34,7 +34,7 @@ class ProductsRepository extends BaseRepository
         $products = $query->fetchAll();
 
         if (!$products) {
-            return null;
+            return [];
         }
 
         return $products;
