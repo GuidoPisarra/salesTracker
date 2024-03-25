@@ -20,7 +20,7 @@ class ProductsRepository extends BaseRepository
     {
         $query = $this->get_bbdd()->prepare('SELECT p.id AS id, n.sucursal AS sucursal, n.nombre AS nombreSucursal, p.description AS description,
             p.cost_price AS cost_price, p.sale_price AS sale_price, p.quantity AS quantity, 
-            p.id_proveedor AS id_proveedor, p.code AS code, p.size AS size, p.activo AS activo, p.codigo_interno AS codigoInterno
+            p.id_proveedor AS id_proveedor, p.code AS code, p.size AS size, p.activo AS activo, p.codigo_interno AS codigoInterno, fecha_actualizado as fechaActualizado
         FROM product p
         INNER JOIN negocio n ON n.id_negocio = p.id_negocio AND n.sucursal = p.sucursal
         WHERE p.activo = :activo AND p.id_negocio = :local 
@@ -40,12 +40,12 @@ class ProductsRepository extends BaseRepository
         return $products;
     }
 
-    public function add_product(AddProductDTO $dto): bool
+    public function add_product(AddProductDTO $dto, string $fecha): bool
     {
 
         $query = $this->get_bbdd()->prepare('INSERT INTO product 
-        (description, cost_price, sale_price, quantity, id_proveedor, code, size, activo, id_negocio, sucursal)
-        VALUES (:description, :costPrice, :salePrice, :quantity, :idProveedor, :code, :size, :activo, :id_negocio, :id_sucursal)');
+        (description, cost_price, sale_price, quantity, id_proveedor, code, size, activo, id_negocio, sucursal, fecha_actualizado)
+        VALUES (:description, :costPrice, :salePrice, :quantity, :idProveedor, :code, :size, :activo, :id_negocio, :id_sucursal, :fecha)');
 
         $newProduct = $dto->to_array();
         $activo = 0;
@@ -59,6 +59,7 @@ class ProductsRepository extends BaseRepository
         $query->bindParam(':activo', $activo);
         $query->bindParam(':id_negocio', $newProduct["id_negocio"]);
         $query->bindParam(':id_sucursal', $newProduct["id_sucursal"]);
+        $query->bindParam(':fecha', $fecha);
 
         $response = $query->execute();
         return $response;
@@ -78,7 +79,7 @@ class ProductsRepository extends BaseRepository
 
     public function one_product(OneProductDTO $dto): array
     {
-        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price costPrice,sale_price salePrice,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo FROM product WHERE  code = :code AND activo=0 AND id_negocio = :id_negocio');
+        $query = $this->get_bbdd()->prepare('SELECT id id, description description,cost_price costPrice,sale_price salePrice,quantity quantity,id_proveedor id_proveedor,code code,size size,activo activo, fecha_actualizado as fechaActualizado FROM product WHERE  code = :code AND activo=0 AND id_negocio = :id_negocio');
 
         $newProduct = $dto->to_array();
         $query->bindParam(':code', $newProduct["code"]);
@@ -94,16 +95,17 @@ class ProductsRepository extends BaseRepository
         return $product;
     }
 
-    public function products_price_percentage(float $percentage, int $id_negocio, int $proveedor): bool
+    public function products_price_percentage(float $percentage, int $id_negocio, int $proveedor, string $fecha): bool
     {
         $percent = (float) $percentage;
         $negocio = $id_negocio;
         $query_proveedor = ($proveedor !== 0) ? ' AND id_proveedor = :proveedor' : '';
 
-        $query = $this->get_bbdd()->prepare("UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)) WHERE p.activo = 0 AND id_negocio = :id_negocio" . $query_proveedor);
+        $query = $this->get_bbdd()->prepare("UPDATE product p SET p.sale_price =CEIL( p.sale_price +((p.sale_price  * :percent )/100)), p.fecha_actualizado = :fecha WHERE p.activo = 0 AND id_negocio = :id_negocio" . $query_proveedor);
 
         $query->bindParam(':percent', $percent);
         $query->bindParam(':id_negocio', $negocio);
+        $query->bindParam(':fecha', $fecha);
         if ($proveedor !== 0) {
             $query->bindParam(':proveedor', $proveedor);
         }
@@ -134,9 +136,9 @@ class ProductsRepository extends BaseRepository
 
 
 
-    public function add_products_stcok(AddStockDTO $dto): bool
+    public function add_products_stcok(AddStockDTO $dto, string $fecha): bool
     {
-        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity, p.cost_price = :costo, p.sale_price = :venta WHERE p.id = :id AND p.activo = 0');
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = p.quantity + :quantity , p.cost_price = :costo, p.sale_price = :venta, fecha_actualizado = :fecha WHERE p.id = :id AND p.activo = 0');
 
         $newProduct = $dto->to_array();
         $activo = 0;
@@ -144,6 +146,23 @@ class ProductsRepository extends BaseRepository
         $query->bindParam(':quantity', $newProduct["quantity"]);
         $query->bindParam(':costo', $newProduct["costPrice"]);
         $query->bindParam(':venta', $newProduct["salePrice"]);
+        $query->bindParam(':fecha', $fecha);
+
+        $response = $query->execute();
+        return $response;
+    }
+
+    public function add_products_stock_edit(AddStockDTO $dto, string $fecha): bool
+    {
+        $query = $this->get_bbdd()->prepare('UPDATE product p SET p.quantity = :quantity , p.cost_price = :costo, p.sale_price = :venta, fecha_actualizado = :fecha WHERE p.id = :id AND p.activo = 0');
+
+        $newProduct = $dto->to_array();
+        $activo = 0;
+        $query->bindParam(':id', $newProduct["id"]);
+        $query->bindParam(':quantity', $newProduct["quantity"]);
+        $query->bindParam(':costo', $newProduct["costPrice"]);
+        $query->bindParam(':venta', $newProduct["salePrice"]);
+        $query->bindParam(':fecha', $fecha);
 
         $response = $query->execute();
         return $response;

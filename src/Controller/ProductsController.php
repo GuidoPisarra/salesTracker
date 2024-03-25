@@ -284,7 +284,7 @@ class ProductsController extends BaseController
         }
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $resultado = $product_service->add_stock_product($dto);
+                $resultado = $product_service->add_stock_product_edit($dto);
                 if ($resultado !== true) {
                     //$log::get_log()->error('ENDPOINT: app_editOneProduct ERROR: Ocurrió un error editando el producto.');
                     throw new \Exception("Ocurrió un error al editar el producto.");

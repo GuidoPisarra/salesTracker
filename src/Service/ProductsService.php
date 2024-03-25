@@ -24,7 +24,7 @@ class ProductsService
 
     public function add_product(AddProductDTO $dto)
     {
-        return $this->rep_products->add_product($dto);
+        return $this->rep_products->add_product($dto, $this->get_fecha_hora_actual());
     }
 
     public function del_product(DeleteProductDTO $dto)
@@ -41,12 +41,17 @@ class ProductsService
     public function products_price_percentage(float $percentage, int $id_negocio, int $proveedor)
     {
         $this->rep_products->actualizar_cta_cte($percentage, $id_negocio, $proveedor);
-        return $this->rep_products->products_price_percentage($percentage, $id_negocio, $proveedor);
+        return $this->rep_products->products_price_percentage($percentage, $id_negocio, $proveedor, $this->get_fecha_hora_actual());
     }
 
     public function add_stock_product(AddStockDTO $dto)
     {
-        return $this->rep_products->add_products_stcok($dto);
+        return $this->rep_products->add_products_stcok($dto, $this->get_fecha_hora_actual());
+    }
+
+    public function add_stock_product_edit(AddStockDTO $dto)
+    {
+        return $this->rep_products->add_products_stock_edit($dto, $this->get_fecha_hora_actual());
     }
 
     public function trasladar_product(array $datos_dto)
@@ -66,6 +71,13 @@ class ProductsService
         return true;
     }
 
+    private function get_fecha_hora_actual(): string
+    {
+        $timezone = new \DateTimeZone('America/Argentina/Buenos_Aires');
+        $dateTime = new \DateTime('now', $timezone);
+        $fechaHoraArgentina = $dateTime->format('Y-m-d H:i:s');
+        return $fechaHoraArgentina;
+    }
 
     public function one_product_sin_token(OneProductDTO $dto)
     {
